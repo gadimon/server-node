@@ -19,7 +19,7 @@ const getAllMissles = async(): Promise<IMissiles[]> => {
 
 export const buyMissileService = async (username: string, orgname: string, missileName: string, quantity: number) => {
   try {
-    const user = await User.findById({name:username});
+    const user = await User.findOne({name:username});
     const org = await Org.findOne({name:orgname});
     console.log(user, org);
 

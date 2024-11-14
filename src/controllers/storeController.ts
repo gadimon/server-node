@@ -24,8 +24,6 @@ router.get("/", async (req: Request, res: Response): Promise<void> => {
 router.post("/buy", async (req: Request, res: Response): Promise<void> => {
   try {
     const { missileName, quantity, username, orgname } = req.body;
-    // const userId = req.body.userId; 
-    // const orgId = req.body.orgId;
 
     const result = await buyMissileService(username, orgname, missileName, quantity, );
     res.status(200).json({ message: "Missile buy successfully", result });
