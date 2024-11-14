@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import {
-  getAllMissles,
+  getAllMissiles,
   createUser,
   buyMissileService,
 } from "../service/storeService";
@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get("/", async (req: Request, res: Response): Promise<void> => {
   try {
-    const data = await getAllMissles();
+    const data = await getAllMissiles();
      res.send(data);
      
   } catch (error: any) {
