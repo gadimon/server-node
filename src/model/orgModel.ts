@@ -2,8 +2,8 @@ import mongoose, { Schema, Document, Types } from "mongoose";
 import { IUser } from './userModel'
 
 export interface Resources{
-    name: string,
-    amount: number,
+    missileName: string,
+    quantity: number,
 }
 
 export interface IOrg extends Document {
@@ -37,4 +37,4 @@ const orgSchema: Schema = new Schema ({
 
 });
 
-export default mongoose.model<IOrg>("Org", orgSchema);
+export default mongoose.model<IOrg>("Org", orgSchema,"Org");

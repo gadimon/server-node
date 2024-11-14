@@ -7,13 +7,13 @@ import { IOrg } from "./orgModel";
 export interface IUser extends Document {
     username: string,
     password: string,
-    org: string
+    org: string,
     area: string;
     comparePassword(userPassword: string): Promise<Boolean>
 };
 
 const UserSchema: Schema = new Schema({
-    name: {
+    username: {
         type: String,
         require: true,
     },
@@ -49,4 +49,4 @@ UserSchema.methods.comparePassword = async function (userPassword: string): Prom
 }
 
 
-export default mongoose.model<IUser>("User", UserSchema);
+export default mongoose.model<IUser>("User", UserSchema,"User");

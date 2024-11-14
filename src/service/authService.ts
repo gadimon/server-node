@@ -3,6 +3,7 @@ import fs from "fs";
 import { comparePassword } from "../../helpers/bcrypt";
 import { CookieOptions } from "express";
 import { Request, Response } from 'express';
+import User from '../model/userModel'
 
 
 const data: string = fs.readFileSync("./data.json", "utf-8");
@@ -15,61 +16,37 @@ const cookieConfig: CookieOptions = {
     maxAge: 24 * 60 * 60 * 1000  // תוקף של יום אחד (במילישניות)
 };
 
-// const loginUser = async ({ username, password }: any, res: Response) => {
-//     try {
-//         // בדיקת המשתמש כמו קודם
-//         const user = Users.find((item: any) => 
-//             item.username === username && 
-//             comparePassword(password, item.password) === true
-//         );
+interface userDTO {
+	username: string,
+	password: string
+}
 
-//         if (!user) {
-//             throw new Error("Authentication Error: Invalid email or password");
-//         }
+const loginUser = async (user: userDTO, res: Response) => {
+	try {
+		const foundUser = await User.findOne({ username: user.username })
 
-//         // יצירת הטוקן
-//         const token = generateAuthToken(user);
-//         res.cookie('auth_token', token, cookieConfig);
-//         return Promise.resolve({
-//             message: "Login successful",
-//             user: {
-//                 username: user.username,
-//             }
-//         });
+		if (!foundUser) return console.log("User not found")
+		const isPasswordCorrect = await comparePassword(user.password, foundUser.password)
+		if (!isPasswordCorrect) return console.log("Incorrect password or Email");
+return foundUser
+	
+	} catch (error) {
+		throw new Error("Failed to login")
+	}
+}
 
-//     } catch (error: any) {
-//         error.status = 400;
-//         return Promise.reject(error);
-//     }
-// };
-
-const logoutUser = (res: Response) => {
-    res.clearCookie('auth_token', {
-        ...cookieConfig,
-        maxAge: 0
-    });
-    return {
-        message: "Logout successful",
-    };
+const logoutUser = (res: Response): void => {
+	try {
+		res.clearCookie("auth_token", {
+			httpOnly: true,
+			secure: true,
+			sameSite: "strict",
+		});
+	} catch (error) {
+		console.log(error);
+	}
 };
-
-// // פונקציית עזר לבדיקת תוקף הטוקן
-// const verifyAuthCookie = (req: Request) => {
-//     const token = req.cookies.auth_token;
-//     if (!token) {
-//         throw new Error("No authentication token found");
-//     }
-    
-//     try {
-//         // כאן תוכל להשתמש בפונקציה שמאמתת את הטוקן
-//         const decoded = verifyAuthToken(token);
-//         return decoded;
-//     } catch (error) {
-//         throw new Error("Invalid authentication token");
-//     }
-// };
-
       export {
-        // loginUser,
+        loginUser,
         logoutUser
       }

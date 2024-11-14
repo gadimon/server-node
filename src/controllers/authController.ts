@@ -1,51 +1,28 @@
 import express, { Request, Response, NextFunction } from "express";
 import { handleError } from "../../utils/handleErrors";
-// import { loginUser, logoutUser } from "../service/authService";
-import { createUser } from "../service/dataService";
+import { createUser } from "../service/storeService";
+import { loginUser, logoutUser } from "../service/authService";
 
 const router = express.Router();
 
-interface LoginRequest extends Request {
-  body: {
-    username: string;
-    password: string;
-  };
-}
+router.post("/login", async (req: Request, res: Response): Promise<void> => {
+	try {
+		const user = req.body
+		const userMan = await loginUser(user,res)
+		res.json(userMan)
+	} catch (error: any) {
+		console.error(error.message);
+	}
+});
 
-// router.post(
-//   "/login",
-//   async (
-//     req: LoginRequest,
-//     res: Response,
-//     next: NextFunction
-//   ): Promise<void> => {
-//     try {
-//       const { username, password } = req.body;
-//       const user: any = await loginUser({ username, password }, res);
-//       res.json(user);
-//     } catch (error) {
-//       const status = (error as { status?: number }).status || 500;
-//       const message = (error as Error).message || "Internal Server Error";
-//       handleError(res, status, message);
-//       next(error);
-//     }
-//   }
-// );
-
-// router.post(
-//   "/logout",
-//   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-//     try {
-//       const result = await logoutUser(res);
-//       res.json(result);
-//     } catch (error) {
-//       const status = (error as { status?: number }).status || 500;
-//       const message = (error as Error).message || "Internal Server Error";
-//       handleError(res, status, message);
-//       next(error);
-//     }
-//   }
-// );
+router.post("/logout", (req: Request, res: Response): void => {
+	try {
+		logoutUser(res);
+		res.status(200).json({ message: "Logged out successfully" });
+	} catch (error: any) {
+		console.error(error.message);
+	}
+});
 
 router.post(
   "/register",

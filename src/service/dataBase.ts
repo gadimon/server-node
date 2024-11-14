@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import User,{ IUser } from "../model/userModel";
 
 dotenv.config();
 
@@ -13,3 +14,13 @@ export const connectToDatabase = async (): Promise<void> => {
 
     }
 };
+
+// פונקציה ליצירת נתון חדש
+export const createUser = async (userData:any): Promise<IUser> => {
+    const user = new User({
+        ...userData,
+    });
+  
+    return await user.save();
+  };
+  

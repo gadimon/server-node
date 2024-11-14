@@ -36,4 +36,4 @@ const MissilesSchema: Schema = new Schema({
 
 
 
-export default mongoose.model<IMissiles>(" Missiles", MissilesSchema);
+export default mongoose.model<IMissiles>(" Missiles", MissilesSchema," Missiles");

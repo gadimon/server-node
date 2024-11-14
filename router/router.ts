@@ -1,5 +1,5 @@
 import express, {IRouter, NextFunction } from "express";
-import dataRestController from "../src/controllers/dataController";
+import dataRestController from "../src/controllers/storeController";
 import authRestController from "../src/controllers/authController";
 // import {verifyUser,verifyAdmin} from "../middleware/jwt"
 import { handleError } from "../utils/handleErrors";
